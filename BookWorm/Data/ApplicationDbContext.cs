@@ -12,12 +12,19 @@ namespace BookWorm.Data
         }
 
         public DbSet<Book> Book { get; set; }
+        public DbSet<Profile> Profiles { get; set; }  // Add the Profile DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Добавление тестовых данных
+            // Configure relationships, if needed
+            modelBuilder.Entity<Profile>()
+                .HasOne(p => p.User)
+                .WithOne()
+                .HasForeignKey<Profile>(p => p.UserId);
+
+            // Add test data for books
             modelBuilder.Entity<Book>().ToTable("Book");
             modelBuilder.Entity<Book>().HasData(
                 new Book { Id = 1, Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", Price = 10.99m, Description = "Classic novel set in the 1920s." },
