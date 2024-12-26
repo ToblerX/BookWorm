@@ -23,7 +23,7 @@ namespace BookWorm.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["AuthorSortParm"] = sortOrder == "author" ? "author_desc" : "author";
@@ -32,6 +32,13 @@ namespace BookWorm.Controllers
             var books = from b in _context.Book
                         select b;
 
+            // Apply search filter if a search term is provided
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(b => b.Title.Contains(searchString));
+            }
+
+            // Sorting logic
             switch (sortOrder)
             {
                 case "title_desc":

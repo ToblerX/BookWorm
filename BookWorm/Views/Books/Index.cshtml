@@ -1,12 +1,21 @@
 ﻿@model IEnumerable<BookWorm.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Books";
 }
 
 <h1>Books</h1>
 
-<table class="table">
+<!-- Search Form -->
+<form method="get" action="@Url.Action("Index")">
+    <div class="form-group">
+        <input type="text" name="searchString" class="form-control" placeholder="Search by book title" />
+    </div>
+    <!-- Add margin-top to the button to move it lower -->
+    <button type="submit" class="btn btn-primary mt-3">Search</button>
+</form>
+
+<table class="table mt-3">
     <thead>
         <tr>
             <th>
