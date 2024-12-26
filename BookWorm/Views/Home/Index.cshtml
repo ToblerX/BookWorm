@@ -29,7 +29,7 @@
                 <div class="card h-100">
                     <!-- Make the image a link -->
                     <a href="@Url.Action("Details", "Books", new { id = book.Id })">
-                        <img src="@book.ImageUrl" class="card-img-top" alt="@book.Title" style="height: 250px; object-fit: cover;">
+                        <img src="@book.ImageUrl" class="card-img-top zoom-image" alt="@book.Title" style="height: 250px; object-fit: cover;">
                     </a>
 
                     <div class="card-body">
@@ -44,3 +44,16 @@
         }
     </div>
 </div>
+
+@section Styles {
+    <style>
+        /* CSS to enlarge the image on hover */
+        .zoom-image {
+            transition: transform 0.3s ease; /* Smooth transition */
+        }
+
+            .zoom-image:hover {
+                transform: scale(1.1); /* Increase size by 10% */
+            }
+    </style>
+}

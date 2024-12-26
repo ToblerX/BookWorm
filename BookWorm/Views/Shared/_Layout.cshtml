@@ -4,10 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BookWorm</title>
+
     <script type="importmap"></script>
+
+    <!-- Main Bootstrap and Site CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookWorm.styles.css" asp-append-version="true" />
+
+    <!-- Render any additional styles defined in views -->
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -50,11 +56,11 @@
                             </li>
                         }
                     </ul>
-
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -66,6 +72,7 @@
             &copy; 2024 - BookWorm - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
