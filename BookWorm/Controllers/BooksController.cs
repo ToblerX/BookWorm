@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookWorm.Data;
 using BookWorm.Models;
-using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookWorm.Controllers
 {
@@ -67,9 +65,6 @@ namespace BookWorm.Controllers
             return View(await books.ToListAsync());
         }
 
-
-
-
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -89,6 +84,7 @@ namespace BookWorm.Controllers
         }
 
         // GET: Books/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -96,6 +92,7 @@ namespace BookWorm.Controllers
 
         // POST: Books/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Author,Price,Description,ImageUrl")] Book book)
         {
@@ -109,6 +106,7 @@ namespace BookWorm.Controllers
         }
 
         // GET: Books/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,6 +124,7 @@ namespace BookWorm.Controllers
 
         // POST: Books/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Price,Description,ImageUrl")] Book book)
         {
@@ -158,6 +157,7 @@ namespace BookWorm.Controllers
         }
 
         // GET: Books/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -177,6 +177,7 @@ namespace BookWorm.Controllers
 
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -195,7 +196,6 @@ namespace BookWorm.Controllers
             return _context.Book.Any(e => e.Id == id);
         }
 
-        // Action to add a book to the cart
         // Action to add a book to the cart
         public async Task<IActionResult> AddToCart(int bookId)
         {
