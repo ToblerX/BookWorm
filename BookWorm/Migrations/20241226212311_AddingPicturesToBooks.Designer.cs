@@ -4,6 +4,7 @@ using BookWorm.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookWorm.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241226212311_AddingPicturesToBooks")]
+    partial class AddingPicturesToBooks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace BookWorm.Migrations
                             Id = 1,
                             Author = "F. Scott Fitzgerald",
                             Description = "Classic novel set in the 1920s.",
-                            ImageUrl = "https://i.etsystatic.com/20545894/r/il/7d8e6d/1977091569/il_570xN.1977091569_fv4f.jpg",
+                            ImageUrl = "",
                             Price = 10.99m,
                             Title = "The Great Gatsby"
                         },
@@ -68,7 +71,7 @@ namespace BookWorm.Migrations
                             Id = 2,
                             Author = "George Orwell",
                             Description = "Dystopian novel about a totalitarian regime.",
-                            ImageUrl = "https://m.media-amazon.com/images/I/61ZewDE3beL.jpg",
+                            ImageUrl = "",
                             Price = 8.99m,
                             Title = "1984"
                         },
@@ -77,7 +80,7 @@ namespace BookWorm.Migrations
                             Id = 3,
                             Author = "Harper Lee",
                             Description = "A novel about racial injustice in the American South.",
-                            ImageUrl = "https://cdn.britannica.com/21/182021-050-666DB6B1/book-cover-To-Kill-a-Mockingbird-many-1961.jpg",
+                            ImageUrl = "",
                             Price = 7.99m,
                             Title = "To Kill a Mockingbird"
                         });

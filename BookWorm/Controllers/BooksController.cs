@@ -25,15 +25,12 @@ namespace BookWorm.Controllers
         // GET: Books
         public async Task<IActionResult> Index(string sortOrder)
         {
-            // Параметры для сортировки
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
-            // Выборка книг
             var books = from b in _context.Book
                         select b;
 
-            // Применение сортировки
             switch (sortOrder)
             {
                 case "name_desc":
@@ -80,7 +77,7 @@ namespace BookWorm.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author,Price,Description")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Title,Author,Price,Description,ImageUrl")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +107,7 @@ namespace BookWorm.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Price,Description")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Price,Description,ImageUrl")] Book book)
         {
             if (id != book.Id)
             {
@@ -177,60 +174,51 @@ namespace BookWorm.Controllers
         {
             return _context.Book.Any(e => e.Id == id);
         }
+
         // Action to add a book to the cart
         public async Task<IActionResult> AddToCart(int bookId)
         {
-            // Get the current logged-in user
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");  // Redirect to the login page if the user is not logged in
+                return RedirectToAction("Login", "Identity/Account");
             }
 
-            // Find the book by its ID
             var book = await _context.Book.FindAsync(bookId);
             if (book == null)
             {
                 return NotFound("Book not found.");
             }
 
-            // Create a new Cart item and add it to the user's cart
             var cartItem = new Cart
             {
                 UserId = user.Id,
                 BookId = book.Id,
                 BookName = book.Title,
-                Price = book.Price  // Store the price when adding to the cart
+                Price = book.Price
             };
 
             _context.Carts.Add(cartItem);
             await _context.SaveChangesAsync();
 
-            // After adding the book, redirect the user to the ViewCart page (their own cart)
-            return RedirectToAction("ViewCart", "Cart");  // Ensure it redirects to the Cart controller
+            return RedirectToAction("ViewCart", "Cart");
         }
-
-
 
         // Action to view the user's cart
         public async Task<IActionResult> ViewCart()
         {
-            // Get the current logged-in user
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");  // Redirect to login if the user is not logged in
+                return RedirectToAction("Login", "Identity/Account");
             }
 
-            // Retrieve the cart items for the logged-in user
             var cartItems = await _context.Carts
                 .Where(c => c.UserId == user.Id)
                 .ToListAsync();
 
-            // Pass the cart items to the ViewCart view
             return View(cartItems);
         }
-
 
         // Action to remove a book from the cart
         [HttpPost]

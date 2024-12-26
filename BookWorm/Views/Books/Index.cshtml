@@ -27,6 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
+            <th>
+                Image
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -47,8 +50,17 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="Book Image" class="img-thumbnail" style="max-width: 100px;" />
+                    }
+                    else
+                    {
+                        <span>No image available</span>
+                    }
+                </td>
+                <td>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <!-- Update the Add to Cart button -->
                     <a asp-action="AddToCart" asp-route-bookId="@item.Id">Add to Cart</a>
                 </td>
             </tr>
