@@ -27,15 +27,14 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <!-- Display book image -->
-                    <img src="@book.ImageUrl" class="card-img-top" alt="@book.Title" style="height: 250px; object-fit: cover;">
+                    <!-- Make the image a link -->
+                    <a href="@Url.Action("Details", "Books", new { id = book.Id })">
+                        <img src="@book.ImageUrl" class="card-img-top" alt="@book.Title" style="height: 250px; object-fit: cover;">
+                    </a>
 
                     <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="@Url.Action("Details", "Books", new { id = book.Id })">
-                                @book.Title
-                            </a>
-                        </h5>
+                        <!-- Plain text title -->
+                        <h5 class="card-title">@book.Title</h5>
                         <p class="card-text">
                             @book.Description
                         </p>
