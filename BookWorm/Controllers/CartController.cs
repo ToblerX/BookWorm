@@ -38,7 +38,8 @@ namespace BookWorm.Controllers
                 UserId = user.Id,
                 BookId = book.Id,
                 BookName = book.Title,
-                Price = book.Price
+                // Explicit cast from float to decimal
+                Price = (decimal)book.Price // Casting the Price to decimal
             };
 
             _context.Carts.Add(cartItem);
@@ -63,7 +64,6 @@ namespace BookWorm.Controllers
             return View(cartItems);
         }
 
-
         // Action to remove a book from the cart
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int id)
@@ -77,6 +77,5 @@ namespace BookWorm.Controllers
 
             return RedirectToAction("ViewCart");
         }
-
     }
 }

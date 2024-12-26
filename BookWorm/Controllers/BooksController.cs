@@ -23,7 +23,7 @@ namespace BookWorm.Controllers
         // GET: Books
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["TitleSortParm"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["AuthorSortParm"] = sortOrder == "author" ? "author_desc" : "author";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
@@ -31,7 +31,7 @@ namespace BookWorm.Controllers
                         select b;
 
             // Apply search filter
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 books = books.Where(b => b.Title.Contains(searchString));
             }
@@ -216,7 +216,8 @@ namespace BookWorm.Controllers
                 UserId = user.Id,
                 BookId = book.Id,
                 BookName = book.Title,
-                Price = book.Price
+                // Ensure we are passing a decimal value here
+                Price = (decimal)book.Price  // Casting from float to decimal
             };
 
             _context.Carts.Add(cartItem);

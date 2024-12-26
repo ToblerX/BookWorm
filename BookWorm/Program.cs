@@ -1,6 +1,8 @@
 using BookWorm.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 builder.Services.AddRazorPages();
 
 builder.Services.AddControllersWithViews();
+
+// Configure default culture to "en-US" to use period as decimal separator
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var cultureInfo = new CultureInfo("en-US");
+    options.DefaultRequestCulture = new RequestCulture(cultureInfo);
+    options.SupportedCultures = new[] { cultureInfo };
+    options.SupportedUICultures = new[] { cultureInfo };
+});
 
 var app = builder.Build();
 
