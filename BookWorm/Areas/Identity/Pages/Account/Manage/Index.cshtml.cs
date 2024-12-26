@@ -6,9 +6,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using BookWorm.Data; // Add this namespace
+using BookWorm.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm.Areas.Identity.Pages.Account.Manage
 {
@@ -16,48 +19,40 @@ namespace BookWorm.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _context; // Add the DbContext field
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context) // Inject the DbContext
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context; // Assign the injected context
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string Username { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
+
+            [Display(Name = "Surname")]
+            public string Surname { get; set; }
+
+            [Display(Name = "Postal Address")]
+            public string PostAddress { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -65,11 +60,17 @@ namespace BookWorm.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
+            // Load profile data from the database
+            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
+
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FullName = profile?.FullName,
+                Surname = profile?.Surname,
+                PostAddress = profile?.PostAddress
             };
         }
 
@@ -109,6 +110,29 @@ namespace BookWorm.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            // Save or update profile data
+            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
+            if (profile != null)
+            {
+                profile.FullName = Input.FullName;
+                profile.Surname = Input.Surname;
+                profile.PostAddress = Input.PostAddress;
+                _context.Update(profile);
+            }
+            else
+            {
+                profile = new Profile
+                {
+                    UserId = user.Id,
+                    FullName = Input.FullName,
+                    Surname = Input.Surname,
+                    PostAddress = Input.PostAddress
+                };
+                _context.Add(profile);
+            }
+
+            await _context.SaveChangesAsync();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
