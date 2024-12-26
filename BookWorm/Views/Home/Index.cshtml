@@ -1,8 +1,44 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<BookWorm.Models.Book>
+
+@{
+    ViewData["Title"] = "Home - BookWorm";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron text-center">
+    <h1 class="display-4">Welcome to BookWorm!</h1>
+    <p class="lead">
+        Your one-stop destination for exploring, discovering, and purchasing books from various genres.
+        At BookWorm, we connect book lovers with their next favorite read.
+    </p>
+    <hr class="my-4">
+    <p>
+        Browse through our collection of classics, bestsellers, and hidden gems.
+        From fiction to non-fiction, we have something for every reader.
+    </p>
+    <a class="btn btn-primary btn-lg" href="/Books" role="button">Browse Books</a>
+</div>
+
+<div class="container">
+    <h2 class="mt-5 text-center">Featured Books</h2>
+    <p class="text-center">Check out some of the books we have in our shop!</p>
+
+    <div class="row">
+        @foreach (var book in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <!-- Dynamically generate image path -->
+                    <img class="card-img-top" src="/images/@book.Title.Replace(" ", "-").ToLower().Trim()" alt="@book.Title">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="@Url.Action("Details", "Books", new { id = book.Id })">
+                                @book.Title
+                            </a>
+                        </h5>
+                        <p class="card-text">@book.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

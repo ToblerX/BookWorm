@@ -1,21 +1,24 @@
-using System.Diagnostics;
-using BookWorm.Models;
 using Microsoft.AspNetCore.Mvc;
+using BookWorm.Models;
+using Microsoft.EntityFrameworkCore;
+using BookWorm.Data;
+using System.Diagnostics;
 
 namespace BookWorm.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var books = await _context.Book.ToListAsync();  // Fetch books from the database
+            return View(books);  // Pass the list of books to the view
         }
 
         public IActionResult Privacy()
