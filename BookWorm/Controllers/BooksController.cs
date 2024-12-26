@@ -25,7 +25,8 @@ namespace BookWorm.Controllers
         // GET: Books
         public async Task<IActionResult> Index(string sortOrder)
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["AuthorSortParm"] = sortOrder == "author" ? "author_desc" : "author";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
             var books = from b in _context.Book
@@ -33,8 +34,14 @@ namespace BookWorm.Controllers
 
             switch (sortOrder)
             {
-                case "name_desc":
+                case "title_desc":
                     books = books.OrderByDescending(b => b.Title);
+                    break;
+                case "author":
+                    books = books.OrderBy(b => b.Author);
+                    break;
+                case "author_desc":
+                    books = books.OrderByDescending(b => b.Author);
                     break;
                 case "Price":
                     books = books.OrderBy(b => b.Price);
