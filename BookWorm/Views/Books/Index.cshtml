@@ -7,13 +7,29 @@
 <h1>Books</h1>
 
 <!-- Search Form -->
-<form method="get" action="@Url.Action("Index")">
+<form method="get" action="@Url.Action("Index")" id="searchForm">
     <div class="form-group">
         <input type="text" name="searchString" class="form-control" placeholder="Search by book title" value="@ViewData["SearchString"]" />
     </div>
-    <!-- Add margin-top to the button to move it lower -->
-    <button type="submit" class="btn btn-primary mt-3">Search</button>
+    <div class="form-group d-flex justify-content-start">
+        <!-- Search Button -->
+        <button type="submit" class="btn btn-primary mt-3">Search</button>
+
+        <!-- Clear Search Button -->
+        <button type="button" id="clearSearch" class="btn btn-secondary mt-3 ms-2">Clear Search</button>
+    </div>
 </form>
+
+<script>
+    // JavaScript to clear the search and reload the page without searchString
+    document.getElementById("clearSearch").addEventListener("click", function () {
+        // Reset the search input field
+        document.querySelector("input[name='searchString']").value = '';
+
+        // Submit the form to reload the page without the searchString parameter
+        document.getElementById("searchForm").submit();
+    });
+</script>
 
 <table class="table mt-3">
     <thead>
