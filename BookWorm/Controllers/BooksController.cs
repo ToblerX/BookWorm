@@ -199,7 +199,8 @@ namespace BookWorm.Controllers
             {
                 UserId = user.Id,
                 BookId = book.Id,
-                BookName = book.Title
+                BookName = book.Title,
+                Price = book.Price  // Store the price when adding to the cart
             };
 
             _context.Carts.Add(cartItem);

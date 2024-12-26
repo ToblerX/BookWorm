@@ -1,32 +1,40 @@
 ﻿@model IEnumerable<BookWorm.Models.Cart>
 
-<h2>Your Cart</h2>
+@{
+    ViewData["Title"] = "Your Cart";
+}
 
-@if (Model.Any())
-{
-    <table class="table">
-        <thead>
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Book Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Book Name</th>
-                <th>Action</th>
+                <td>@item.BookName</td>
+                <td>@item.Price.ToString("C")</td> <!-- Format as currency -->
+                <td>
+                    <form method="post" asp-action="RemoveFromCart" asp-route-id="@item.Id">
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.BookName</td>
-                    <td>
-                        <form method="post" asp-action="RemoveFromCart" asp-route-id="@item.Id">
-                            <button type="submit" class="btn btn-danger">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Your cart is empty.</p>
-}
+        }
+    </tbody>
+</table>
+
+<!-- Optionally, add a total price -->
+<p>
+    <strong>Total: </strong>
+    @Model.Sum(item => item.Price).ToString("C") <!-- Calculate and display total price -->
+</p>
+
+<!-- Optionally, add a button to proceed with checkout -->
+<a class="btn btn-primary" href="@Url.Action("Checkout", "Cart")">Proceed to Checkout</a>
