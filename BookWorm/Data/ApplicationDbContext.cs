@@ -13,6 +13,7 @@ namespace BookWorm.Data
 
         public DbSet<Book> Book { get; set; }
         public DbSet<Profile> Profiles { get; set; }  // Add the Profile DbSet
+        public DbSet<Cart> Carts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

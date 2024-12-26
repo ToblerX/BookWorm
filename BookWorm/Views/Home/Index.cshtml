@@ -27,8 +27,6 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <!-- Dynamically generate image path -->
-                    <img class="card-img-top" src="/images/@book.Title.Replace(" ", "-").ToLower().Trim()" alt="@book.Title">
                     <div class="card-body">
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Books", new { id = book.Id })">

@@ -48,7 +48,8 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="" asp-route-id="@item.Id">Add to cart</a>
+                    <!-- Update the Add to Cart button -->
+                    <a asp-action="AddToCart" asp-route-bookId="@item.Id">Add to Cart</a>
                 </td>
             </tr>
         }
