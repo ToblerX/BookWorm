@@ -176,12 +176,13 @@ namespace BookWorm.Controllers
         }
 
         // Action to add a book to the cart
+        // Action to add a book to the cart
         public async Task<IActionResult> AddToCart(int bookId)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("Login", "Identity/Account");
+                return Challenge(); // Redirects to the configured login page
             }
 
             var book = await _context.Book.FindAsync(bookId);
@@ -210,7 +211,7 @@ namespace BookWorm.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("Login", "Identity/Account");
+                return Challenge(); // Redirects to the configured login page
             }
 
             var cartItems = await _context.Carts
