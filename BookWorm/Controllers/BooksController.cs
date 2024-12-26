@@ -32,13 +32,13 @@ namespace BookWorm.Controllers
             var books = from b in _context.Book
                         select b;
 
-            // Apply search filter if a search term is provided
+            // Apply search filter
             if (!String.IsNullOrEmpty(searchString))
             {
                 books = books.Where(b => b.Title.Contains(searchString));
             }
 
-            // Sorting logic
+            // Apply sorting
             switch (sortOrder)
             {
                 case "title_desc":
@@ -61,8 +61,14 @@ namespace BookWorm.Controllers
                     break;
             }
 
+            // Pass the search string to the view
+            ViewData["SearchString"] = searchString;
+
             return View(await books.ToListAsync());
         }
+
+
+
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)

@@ -9,7 +9,7 @@
 <!-- Search Form -->
 <form method="get" action="@Url.Action("Index")">
     <div class="form-group">
-        <input type="text" name="searchString" class="form-control" placeholder="Search by book title" />
+        <input type="text" name="searchString" class="form-control" placeholder="Search by book title" value="@ViewData["SearchString"]" />
     </div>
     <!-- Add margin-top to the button to move it lower -->
     <button type="submit" class="btn btn-primary mt-3">Search</button>
@@ -19,7 +19,7 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-searchString="@ViewData["SearchString"]">
                     @Html.DisplayNameFor(model => model.Title)
                     @if (ViewData["TitleSortParm"].ToString().Contains("desc"))
                     {
@@ -32,7 +32,7 @@
                 </a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" asp-route-searchString="@ViewData["SearchString"]">
                     @Html.DisplayNameFor(model => model.Author)
                     @if (ViewData["AuthorSortParm"].ToString().Contains("desc"))
                     {
@@ -45,7 +45,7 @@
                 </a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-searchString="@ViewData["SearchString"]">
                     @Html.DisplayNameFor(model => model.Price)
                     @if (ViewData["PriceSortParm"].ToString().Contains("desc"))
                     {
@@ -93,8 +93,8 @@
                     }
                 </td>
                 <td>
-                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a class="btn btn-success btn-sm" asp-action="AddToCart" asp-route-bookId="@item.Id">Add to Cart</a>
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id" asp-route-searchString="@ViewData["SearchString"]">Details</a>
+                    <a class="btn btn-success btn-sm" asp-action="AddToCart" asp-route-bookId="@item.Id" asp-route-searchString="@ViewData["SearchString"]">Add to Cart</a>
                 </td>
             </tr>
         }
