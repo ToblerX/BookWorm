@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Your Cart";
+    var isCartEmpty = !Model.Any(); // Check if the cart is empty
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -44,5 +45,17 @@
     @Model.Sum(item => item.Price).ToString("C") <!-- Calculate and display total price -->
 </p>
 
-<!-- Optionally, add a button to proceed with checkout -->
-<a class="btn btn-success" href="@Url.Action("Payment", "Cart")">Pay Now</a>
+<!-- Buttons Section -->
+<div class="d-flex justify-content-between">
+    <!-- Back to Shop button -->
+    <a class="btn btn-secondary" href="@Url.Action("Index", "Books")">Back to Shop</a>
+
+    <!-- Pay Now button -->
+    <a class="btn btn-success @(isCartEmpty ? "disabled" : "")" href="@(isCartEmpty ? "#" : Url.Action("Payment", "Cart"))">Pay Now</a>
+</div>
+
+<!-- Add an informative message when cart is empty -->
+@if (isCartEmpty)
+{
+    <p class="text-muted">Your cart is empty. Please add items to proceed.</p>
+}
