@@ -15,8 +15,14 @@ namespace BookWorm.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
+            // If there's a search query, redirect to the Books Index page with the search parameter
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                return RedirectToAction("Index", "Books", new { searchString });
+            }
+
             var books = await _context.Book.ToListAsync();  // Fetch books from the database
             return View(books);  // Pass the list of books to the view
         }

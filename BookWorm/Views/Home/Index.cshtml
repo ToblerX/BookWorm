@@ -15,7 +15,14 @@
         Browse through our collection of classics, bestsellers, and hidden gems.
         From fiction to non-fiction, we have something for every reader.
     </p>
-    <a class="btn btn-primary btn-lg" href="/Books" role="button">Browse Books</a>
+    <a class="btn btn-primary btn-lg" href="/Books" role="button">To the Shop</a>
+</div>
+
+<!-- Search Form -->
+<div class="container">
+    <form method="get" action="@Url.Action("Index", "Home")" id="searchForm" class="form-inline my-3 justify-content-center">
+        <input type="text" name="searchString" class="form-control mr-2" placeholder="Search for books" value="@Context.Request.Query["searchString"]" />
+    </form>
 </div>
 
 <div class="container">
@@ -36,7 +43,14 @@
                         <!-- Plain text title -->
                         <h5 class="card-title">@book.Title</h5>
                         <p class="card-text">
-                            @book.Description
+                            @if (book.Description.Length > 90)
+                            {
+                                @String.Concat(book.Description.Substring(0, 90), "...")
+                            }
+                            else
+                            {
+                                @book.Description
+                            }
                         </p>
                     </div>
                 </div>
