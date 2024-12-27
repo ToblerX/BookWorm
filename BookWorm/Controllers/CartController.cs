@@ -77,5 +77,45 @@ namespace BookWorm.Controllers
 
             return RedirectToAction("ViewCart");
         }
+        public IActionResult Payment()
+        {
+            // Fetch cart items for display during payment
+            var user = _userManager.GetUserAsync(User).Result;
+            if (user == null)
+            {
+                return Challenge();
+            }
+
+            var cartItems = _context.Carts
+                .Where(c => c.UserId == user.Id)
+                .ToList();
+
+            var totalAmount = cartItems.Sum(item => item.Price);
+
+            // Mock payment page
+            var paymentViewModel = new PaymentViewModel
+            {
+                CartItems = cartItems,
+                TotalAmount = totalAmount
+            };
+
+            return View(paymentViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmPayment()
+        {
+            // Mock payment success
+            TempData["PaymentSuccess"] = "Your payment was successful! Thank you for your purchase.";
+
+            // Optionally, clear the cart after payment
+            var user = _userManager.GetUserAsync(User).Result;
+            var cartItems = _context.Carts.Where(c => c.UserId == user.Id).ToList();
+            _context.Carts.RemoveRange(cartItems);
+            _context.SaveChanges();
+
+            return RedirectToAction("ViewCart");
+        }
+
     }
 }

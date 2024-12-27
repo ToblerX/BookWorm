@@ -6,6 +6,14 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<!-- Display success message if available -->
+@if (TempData["PaymentSuccess"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["PaymentSuccess"]
+    </div>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -37,4 +45,4 @@
 </p>
 
 <!-- Optionally, add a button to proceed with checkout -->
-<a class="btn btn-primary" href="@Url.Action("Checkout", "Cart")">Proceed to Checkout</a>
+<a class="btn btn-success" href="@Url.Action("Payment", "Cart")">Pay Now</a>
