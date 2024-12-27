@@ -23,63 +23,71 @@
 <script>
     // JavaScript to clear the search and reload the page without searchString
     document.getElementById("clearSearch").addEventListener("click", function () {
-        // Reset the search input field
-        document.querySelector("input[name='searchString']").value = '';
+    // Reset the search input field
+    document.querySelector("input[name='searchString']").value = '';
 
-        // Submit the form to reload the page without the searchString parameter
-        document.getElementById("searchForm").submit();
+    // Submit the form to reload the page without the searchString parameter
+    document.getElementById("searchForm").submit();
     });
 </script>
 
 <table class="table mt-3">
     <thead>
         <tr>
-            <th>
+            <th style="width: 15%;">
+                <!-- Title column width -->
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-searchString="@ViewData["SearchString"]">
                     @Html.DisplayNameFor(model => model.Title)
                     @if (ViewData["TitleSortParm"].ToString().Contains("desc"))
                     {
-                        <span>&#9660;</span>  <!-- Descending arrow -->
+                        <span>&#9660;</span> <!-- Descending arrow -->
                     }
                     else
                     {
-                        <span>&#9650;</span>  <!-- Ascending arrow -->
+                        <span>&#9650;</span> <!-- Ascending arrow -->
                     }
                 </a>
             </th>
-            <th>
+            <th style="width: 15%;">
+                <!-- Author column width -->
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" asp-route-searchString="@ViewData["SearchString"]">
                     @Html.DisplayNameFor(model => model.Author)
                     @if (ViewData["AuthorSortParm"].ToString().Contains("desc"))
                     {
-                        <span>&#9660;</span>  <!-- Descending arrow -->
+                        <span>&#9660;</span> <!-- Descending arrow -->
                     }
                     else
                     {
-                        <span>&#9650;</span>  <!-- Ascending arrow -->
+                        <span>&#9650;</span> <!-- Ascending arrow -->
                     }
                 </a>
             </th>
-            <th>
+            <th style="width: 10%;">
+                <!-- Price column width -->
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-searchString="@ViewData["SearchString"]">
                     @Html.DisplayNameFor(model => model.Price)
                     @if (ViewData["PriceSortParm"].ToString().Contains("desc"))
                     {
-                        <span>&#9660;</span>  <!-- Descending arrow -->
+                        <span>&#9660;</span> <!-- Descending arrow -->
                     }
                     else
                     {
-                        <span>&#9650;</span>  <!-- Ascending arrow -->
+                        <span>&#9650;</span> <!-- Ascending arrow -->
                     }
                 </a>
             </th>
-            <th>
+            <th style="width: 30%;">
+                <!-- Description column width -->
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            <th style="width: 15%;">
+                <!-- Image column width -->
                 Image
             </th>
-            <th></th>
+            <th style="width: 15%;">
+                <!-- Actions column width -->
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -96,7 +104,14 @@
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 225)
+                    {
+                        @String.Concat(item.Description.Substring(0, 225), "...")
+                    }
+                    else
+                    {
+                        @item.Description
+                    }
                 </td>
                 <td>
                     @if (!string.IsNullOrEmpty(item.ImageUrl))
@@ -109,8 +124,11 @@
                     }
                 </td>
                 <td>
-                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id" asp-route-searchString="@ViewData["SearchString"]">Details</a>
-                    <a class="btn btn-success btn-sm" asp-action="AddToCart" asp-route-bookId="@item.Id" asp-route-searchString="@ViewData["SearchString"]">Add to Cart</a>
+                    <div class="d-flex gap-2">
+                        <!-- Flex container with gap for spacing -->
+                        <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id" asp-route-searchString="@ViewData["SearchString"]">Details</a>
+                        <a class="btn btn-success btn-sm" asp-action="AddToCart" asp-route-bookId="@item.Id" asp-route-searchString="@ViewData["SearchString"]">Add to Cart</a>
+                    </div>
                 </td>
             </tr>
         }
