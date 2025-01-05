@@ -255,5 +255,51 @@ namespace BookWorm.Controllers
 
             return RedirectToAction("ViewCart");
         }
+        // GET: Books/AdminIndex
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminIndex(string sortOrder, string searchString)
+        {
+            ViewData["TitleSortParm"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["AuthorSortParm"] = sortOrder == "author" ? "author_desc" : "author";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+
+            var books = from b in _context.Book
+                        select b;
+
+            // Apply search filter
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(b => b.Title.Contains(searchString));
+            }
+
+            // Apply sorting
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    books = books.OrderByDescending(b => b.Title);
+                    break;
+                case "author":
+                    books = books.OrderBy(b => b.Author);
+                    break;
+                case "author_desc":
+                    books = books.OrderByDescending(b => b.Author);
+                    break;
+                case "Price":
+                    books = books.OrderBy(b => b.Price);
+                    break;
+                case "price_desc":
+                    books = books.OrderByDescending(b => b.Price);
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Title);
+                    break;
+            }
+
+            // Pass the search string to the view
+            ViewData["SearchString"] = searchString;
+
+            return View(await books.ToListAsync());
+        }
+
     }
 }
