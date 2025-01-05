@@ -33,6 +33,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Cart" asp-controller="Cart" asp-action="ViewCart">View Cart</a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Books" asp-action="AdminIndex" class="nav-link text-dark">Manage Books</a>
+                        }
+
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity?.IsAuthenticated ?? false)
