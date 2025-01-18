@@ -22,6 +22,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+// Configure the correct Identity paths
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login"; // Correct login path
+    options.LogoutPath = "/Identity/Account/Logout"; // Correct logout path
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Correct access denied path
+});
+
 // Register No-Op EmailSender to bypass email functionality
 builder.Services.AddSingleton<IEmailSender, NoOpEmailSender>();
 
